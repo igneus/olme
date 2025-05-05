@@ -70,6 +70,7 @@ feature {}
          p: PROCESS
          args: TRAVERSABLE[STRING]
       do
+         args := Void
          if file_name /= Void then
             args := {FAST_ARRAY[STRING] << file_name >> }
          end
