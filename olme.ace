@@ -1,0 +1,19 @@
+system
+  "olme"
+
+root
+  MAIN: make
+
+default
+  assertion (all)
+  collect (no)
+
+cluster
+  "./src"
+  "${path_liberty_core}/loadpath.se"
+  "${path_liberty_extra}/common/loadpath.se"
+  "${path_liberty_extra}/posix/loadpath.se"
+  "${path_liberty_extra}/readline/loadpath.se"
+
+generate
+  clean(yes);
