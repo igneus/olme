@@ -17,7 +17,7 @@ feature {ANY}
 
          output := io
          if file_name /= Void then
-            create fw.connect_to (file_name)
+            create fw.connect_to (file_name) -- truncate and write
             output := fw
          end
 
@@ -44,6 +44,7 @@ feature {}
          read_line
       rescue
          if is_signal and then signal_number = 2 then
+            -- TODO is it possible to somehow retrieve the text entered so far?
             handling_sigint := True
             retry
          end
