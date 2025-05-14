@@ -30,6 +30,8 @@ feature {ANY}
       end
 
 feature {}
+   system: SYSTEM
+
    read_user_input
       local
          handling_sigint: BOOLEAN
@@ -60,9 +62,30 @@ feature {}
       end
 
    fallback_editor: STRING
+      local
+         cmd: STRING
+         i: INTEGER
+         vars: FAST_ARRAY[STRING]
       once
-         -- TODO
-         Result := "vim"
+         vars := {FAST_ARRAY[STRING] << "VISUAL", "EDITOR" >> }
+
+         from
+            i := vars.lower
+         until
+            i > vars.upper or cmd /= Void
+         loop
+            cmd := system.get_environment_variable (vars.item (i))
+
+            if cmd.count = 0 then
+               cmd := Void
+            end
+
+            i := i + 1
+         end
+
+         Result := cmd
+      ensure
+         Result = Void or else Result.count > 0
       end
 
    run_fallback: INTEGER
@@ -76,18 +99,24 @@ feature {}
             args := {FAST_ARRAY[STRING] << file_name >> }
          end
 
-         -- TODO is there a way to do the good old Unix exec(),
-         --   replacing the current process with the new one?
-         pf.set_keep_environment (True)
-         pf.set_direct_input (True)
-         pf.set_direct_output (True)
-         pf.set_direct_error (True)
+         if fallback_editor = Void then
+            std_error.put_string ("ERROR: fallback editor not set up. Please set the VISUAL or EDITOR environment variable.")
+            std_error.put_new_line
 
-         -- TODO editor hardcoded
-         p := pf.execute ("vim", args)
+            Result := exit_failure_code
+         else
+            -- TODO is there a way to do the good old Unix exec(),
+            --   replacing the current process with the new one?
+            pf.set_keep_environment (True)
+            pf.set_direct_input (True)
+            pf.set_direct_output (True)
+            pf.set_direct_error (True)
 
-         p.wait
-         Result := p.status
+            p := pf.execute (fallback_editor, args)
+
+            p.wait
+            Result := p.status
+         end
       end
 
 end
