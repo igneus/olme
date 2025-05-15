@@ -42,7 +42,7 @@ feature {}
             die_with_code (status)
          end
 
-         prompt := "> "
+         prompt := "olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N> "
          read_line
       rescue
          if is_signal and then signal_number = 2 then
