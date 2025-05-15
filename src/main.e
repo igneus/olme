@@ -76,7 +76,7 @@ feature {}
          loop
             cmd := system.get_environment_variable (vars.item (i))
 
-            if cmd.count = 0 then
+            if cmd /= Void and then cmd.is_empty then
                cmd := Void
             end
 
