@@ -65,9 +65,9 @@ feature {}
       local
          cmd: STRING
          i: INTEGER
-         vars: FAST_ARRAY[STRING]
+         vars: ARRAY[STRING]
       once
-         vars := {FAST_ARRAY[STRING] << "VISUAL", "EDITOR" >> }
+         vars := << "VISUAL", "EDITOR" >>
 
          from
             i := vars.lower
