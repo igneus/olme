@@ -13,6 +13,9 @@ feature {ANY}
          output: OUTPUT_STREAM
          fw: TEXT_FILE_WRITE
       do
+         io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
+         print_file_contents_warning
+
          read_user_input
 
          output := io
@@ -32,6 +35,58 @@ feature {ANY}
 feature {}
    system: SYSTEM
 
+   print_file_contents_warning
+         -- Prints a warning if the file is non-empty
+      local
+         file: REGULAR_FILE
+         fr: TEXT_FILE_READ
+         lines_total, lines_nonempty: INTEGER
+      do
+         if file_name /= Void then
+            create file.make (file_name)
+
+            if file.exists and then file.is_regular then
+               create fr.connect_to (file_name)
+
+               lines_total := 0
+               lines_nonempty := 0
+
+               from
+                  fr.read_line
+               until
+                  fr.end_of_input
+               loop
+                  lines_total := lines_total + 1
+
+                  -- lines of zero length
+                  -- and lines beginning with the '#' shell comment
+                  -- character are considered empty
+                  if (not fr.last_string.is_empty) and then fr.last_string.item (1) /= '#' then
+                     lines_nonempty := lines_nonempty + 1
+                  end
+
+                  fr.read_line
+               end
+
+               fr.disconnect
+
+               if lines_total > 0 then
+                  io.put_string ("WARNING: the file has ")
+                  io.put_integer (lines_total)
+                  io.put_string (" lines")
+
+                  if lines_nonempty > 0 then
+                     io.put_string (", ")
+                     io.put_integer (lines_nonempty)
+                     io.put_string (" of which are non-empty")
+                  end
+
+                  io.put_new_line
+               end
+            end
+         end
+      end
+
    read_user_input
          -- Reads one line of user input.
          -- On SIGINT runs the fallback editor and exits.
@@ -44,7 +99,7 @@ feature {}
             die_with_code (status)
          end
 
-         prompt := "olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N> "
+         prompt := "> "
          read_line
       rescue
          if is_signal and then signal_number = 2 then
