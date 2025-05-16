@@ -1,7 +1,6 @@
 class MAIN
 
 insert
-   ARGUMENTS
    READ_LINE
 
 create {ANY}
@@ -13,27 +12,29 @@ feature {ANY}
          output: OUTPUT_STREAM
          fw: TEXT_FILE_WRITE
       do
+         create settings
+
          io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
          print_file_contents_warning
 
          read_user_input
 
          output := io
-         if file_name /= Void then
-            create fw.connect_to (file_name) -- truncate and write
+         if settings.file_name /= Void then
+            create fw.connect_to (settings.file_name) -- truncate and write
             output := fw
          end
 
          output.put_string (last_line)
          output.put_new_line
 
-         if file_name /= Void then
+         if settings.file_name /= Void then
             fw.disconnect
          end
       end
 
 feature {}
-   system: SYSTEM
+   settings: SETTINGS
 
    print_file_contents_warning
          -- Prints a warning if the file is non-empty
@@ -42,11 +43,11 @@ feature {}
          fr: TEXT_FILE_READ
          lines_total, lines_nonempty: INTEGER
       do
-         if file_name /= Void then
-            create file.make (file_name)
+         if settings.file_name /= Void then
+            create file.make (settings.file_name)
 
             if file.exists and then file.is_regular then
-               create fr.connect_to (file_name)
+               create fr.connect_to (settings.file_name)
 
                lines_total := 0
                lines_nonempty := 0
@@ -109,44 +110,6 @@ feature {}
          end
       end
 
-   file_name: STRING
-         -- Name of the file to be edited. May be Void.
-      do
-         Result := Void
-
-         if argument_count >= 1 then
-            Result := argument (1)
-         end
-      end
-
-   fallback_editor: STRING
-         -- Determines the fallback editor.
-      local
-         cmd: STRING
-         i: INTEGER
-         vars: ARRAY[STRING]
-      once
-         vars := << "VISUAL", "EDITOR" >>
-
-         from
-            i := vars.lower
-         until
-            i > vars.upper or cmd /= Void
-         loop
-            cmd := system.get_environment_variable (vars.item (i))
-
-            if cmd /= Void and then cmd.is_empty then
-               cmd := Void
-            end
-
-            i := i + 1
-         end
-
-         Result := cmd
-      ensure
-         Result = Void or else Result.count > 0
-      end
-
    run_fallback: INTEGER
          -- Runs the fallback editor, returns its exit code.
       local
@@ -155,11 +118,11 @@ feature {}
          args: TRAVERSABLE[STRING]
       do
          args := Void
-         if file_name /= Void then
-            args := {FAST_ARRAY[STRING] << file_name >> }
+         if settings.file_name /= Void then
+            args := {FAST_ARRAY[STRING] << settings.file_name >> }
          end
 
-         if fallback_editor = Void then
+         if settings.fallback_editor = Void then
             std_error.put_string ("ERROR: fallback editor not set up. Please set the VISUAL or EDITOR environment variable.")
             std_error.put_new_line
 
@@ -172,7 +135,7 @@ feature {}
             pf.set_direct_output (True)
             pf.set_direct_error (True)
 
-            p := pf.execute (fallback_editor, args)
+            p := pf.execute (settings.fallback_editor, args)
 
             p.wait
             Result := p.status
