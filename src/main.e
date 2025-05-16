@@ -33,6 +33,8 @@ feature {}
    system: SYSTEM
 
    read_user_input
+         -- Reads one line of user input.
+         -- On SIGINT runs the fallback editor and exits.
       local
          handling_sigint: BOOLEAN
          status: INTEGER
@@ -53,6 +55,7 @@ feature {}
       end
 
    file_name: STRING
+         -- Name of the file to be edited. May be Void.
       do
          Result := Void
 
@@ -62,6 +65,7 @@ feature {}
       end
 
    fallback_editor: STRING
+         -- Determines the fallback editor.
       local
          cmd: STRING
          i: INTEGER
@@ -89,6 +93,7 @@ feature {}
       end
 
    run_fallback: INTEGER
+         -- Runs the fallback editor, returns its exit code.
       local
          pf: PROCESS_FACTORY
          p: PROCESS
