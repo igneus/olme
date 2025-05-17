@@ -2,43 +2,16 @@ class SETTINGS
 -- reads settings from command line arguments and environment
 -- variables, exposes the values
 
+insert
+   COMMAND_LINE
+      rename
+         fallback_editor as cli_fallback_editor
+      end
+
 create
    make
 
-feature {}
-   command_line: COMMAND_LINE
-
 feature {ANY}
-   make
-      do
-         create command_line.make
-      end
-
-   print_help (output: OUTPUT_STREAM)
-      do
-         command_line.print_help (output)
-      end
-
-   is_valid: BOOLEAN
-      once
-         Result := command_line.is_valid
-      end
-
-   help_requested: BOOLEAN
-      once
-         Result := command_line.help_requested
-      end
-
-   is_silent: BOOLEAN
-      once
-         Result := command_line.is_silent
-      end
-
-   file_name: STRING
-      once
-         Result := command_line.file_name
-      end
-
    fallback_editor: STRING
          -- Determines the fallback editor.
       local
@@ -47,8 +20,8 @@ feature {ANY}
          vars: ARRAY[STRING]
          system: SYSTEM
       once
-         if command_line.fallback_editor /= Void then
-            Result := command_line.fallback_editor
+         if cli_fallback_editor /= Void then
+            Result := cli_fallback_editor
          else
             vars := << "VISUAL", "EDITOR" >>
 
