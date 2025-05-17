@@ -16,7 +16,9 @@ feature {ANY}
          create factory
          create args.make (
             factory.no_parameters or
-            (opt_help and opt_silent and opt_fallback and arg_file)
+            (opt_help and opt_silent and opt_fallback
+               and opt_git_history
+               and arg_file)
                           )
 
          is_valid := args.parse_command_line
@@ -51,6 +53,13 @@ feature {ANY}
          end
       end
 
+   git_history_requested: BOOLEAN
+      require
+         is_valid
+      once
+         Result := opt_git_history.is_set
+      end
+
    file_name: STRING
       require
          is_valid
@@ -79,6 +88,12 @@ feature {}
    opt_fallback: COMMAND_LINE_TYPED_ARGUMENT[FIXED_STRING]
       once
          Result := factory.option_string ("f", "fallback", "EDITOR", "Editor to run as fallback for multi-line editing - the VISUAL and EDITOR environment variables are used by default")
+      end
+
+   opt_git_history: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
+      once
+         -- TODO possibly remove short option
+         Result := factory.option_boolean ("t", "git-history", "Load git commit messages to readline history")
       end
 
 end

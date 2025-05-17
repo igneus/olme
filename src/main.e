@@ -25,6 +25,7 @@ feature {ANY}
 
 feature {}
    settings: SETTINGS
+   pf: PROCESS_FACTORY
 
    run
          -- Run the logic of file editing
@@ -38,6 +39,10 @@ feature {}
          if not settings.is_silent then
             io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
             print_file_contents_warning
+         end
+
+         if settings.git_history_requested then
+            load_history
          end
 
          read_user_input
@@ -108,6 +113,26 @@ feature {}
          end
       end
 
+   load_history
+         -- Load previous messages to readline history
+      local
+         p: PROCESS
+      do
+         p := pf.execute ("git", << "log", "--max-count=30", "--pretty=%%s" >>)
+
+         from
+            p.output.read_line
+         until
+            p.output.end_of_input
+         loop
+            history.add (create {STRING}.copy (p.output.last_string))
+
+            p.output.read_line
+         end
+
+         p.wait
+      end
+
    read_user_input
          -- Reads one line of user input.
          -- On SIGINT runs the fallback editor and exits.
@@ -133,7 +158,6 @@ feature {}
    run_fallback: INTEGER
          -- Runs the fallback editor, returns its exit code.
       local
-         pf: PROCESS_FACTORY
          p: PROCESS
          args: TRAVERSABLE[STRING]
       do
