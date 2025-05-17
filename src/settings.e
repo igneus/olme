@@ -2,18 +2,36 @@ class SETTINGS
 -- reads settings from command line arguments and environment
 -- variables, exposes the values
 
-insert
-   ARGUMENTS
+create
+   make
+
+feature {}
+   command_line: COMMAND_LINE
 
 feature {ANY}
-   file_name: STRING
-         -- Name of the file to be edited. May be Void.
-      once
-         Result := Void
+   make
+      do
+         create command_line.make
+      end
 
-         if argument_count >= 1 then
-            Result := argument (1)
-         end
+   print_help (output: OUTPUT_STREAM)
+      do
+         command_line.print_help (output)
+      end
+
+   is_valid: BOOLEAN
+      once
+         Result := command_line.is_valid
+      end
+
+   help_requested: BOOLEAN
+      once
+         Result := command_line.help_requested
+      end
+
+   file_name: STRING
+      once
+         Result := command_line.file_name
       end
 
    fallback_editor: STRING

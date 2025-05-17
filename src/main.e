@@ -8,11 +8,32 @@ create {ANY}
 
 feature {ANY}
    make
+      do
+         create settings.make
+
+         if settings.is_valid then
+            if settings.help_requested then
+               settings.print_help (io)
+            else
+               run
+            end
+         else
+            settings.print_help (io)
+            die_with_code (exit_failure_code)
+         end
+      end
+
+feature {}
+   settings: SETTINGS
+
+   run
+         -- Run the logic of file editing
+      require
+         settings.is_valid
       local
          output: OUTPUT_STREAM
          fw: TEXT_FILE_WRITE
       do
-         create settings
 
          io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
          print_file_contents_warning
@@ -32,9 +53,6 @@ feature {ANY}
             fw.disconnect
          end
       end
-
-feature {}
-   settings: SETTINGS
 
    print_file_contents_warning
          -- Prints a warning if the file is non-empty
