@@ -24,3 +24,7 @@ Liberty Eiffel
 ## Building
 
 `$ se c olme.ace`
+
+## License
+
+GNU GPL v3
