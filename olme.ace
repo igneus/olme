@@ -6,6 +6,7 @@ root
 
 default
   assertion (all)
+  -- assertion (no) -- run fast, at the cost of skipping runtime contract checks
   collect (no)
 
 cluster
