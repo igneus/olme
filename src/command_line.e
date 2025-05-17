@@ -16,7 +16,7 @@ feature {ANY}
          create factory
          create args.make (
             factory.no_parameters or
-            (opt_help and arg_file)
+            (opt_help and opt_fallback and arg_file)
                           )
 
          is_valid := args.parse_command_line
@@ -33,6 +33,15 @@ feature {ANY}
          is_valid
       once
          Result := opt_help.is_set
+      end
+
+   fallback_editor: STRING
+      require
+         is_valid
+      once
+         if opt_fallback.is_set then
+            Result := opt_fallback.item.string
+         end
       end
 
    file_name: STRING
@@ -53,6 +62,11 @@ feature {}
    opt_help: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
       once
          Result := factory.option_boolean ("h", "help", "Print this help and exit")
+      end
+
+   opt_fallback: COMMAND_LINE_TYPED_ARGUMENT[FIXED_STRING]
+      once
+         Result := factory.option_string ("f", "fallback", "EDITOR", "Editor to run as fallback for multi-line editing - the VISUAL and EDITOR environment variables are used by default")
       end
 
 end

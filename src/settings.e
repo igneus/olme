@@ -42,23 +42,27 @@ feature {ANY}
          vars: ARRAY[STRING]
          system: SYSTEM
       once
-         vars := << "VISUAL", "EDITOR" >>
+         if command_line.fallback_editor /= Void then
+            Result := command_line.fallback_editor
+         else
+            vars := << "VISUAL", "EDITOR" >>
 
-         from
-            i := vars.lower
-         until
-            i > vars.upper or cmd /= Void
-         loop
-            cmd := system.get_environment_variable (vars.item (i))
+            from
+               i := vars.lower
+            until
+               i > vars.upper or cmd /= Void
+            loop
+               cmd := system.get_environment_variable (vars.item (i))
 
-            if cmd /= Void and then cmd.is_empty then
-               cmd := Void
+               if cmd /= Void and then cmd.is_empty then
+                  cmd := Void
+               end
+
+               i := i + 1
             end
 
-            i := i + 1
+            Result := cmd
          end
-
-         Result := cmd
       ensure
          Result = Void or else Result.count > 0
       end
