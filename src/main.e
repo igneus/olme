@@ -35,8 +35,10 @@ feature {}
          fw: TEXT_FILE_WRITE
       do
 
-         io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
-         print_file_contents_warning
+         if not settings.is_silent then
+            io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
+            print_file_contents_warning
+         end
 
          read_user_input
 

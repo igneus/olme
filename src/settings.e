@@ -29,6 +29,11 @@ feature {ANY}
          Result := command_line.help_requested
       end
 
+   is_silent: BOOLEAN
+      once
+         Result := command_line.is_silent
+      end
+
    file_name: STRING
       once
          Result := command_line.file_name
