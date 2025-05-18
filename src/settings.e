@@ -4,8 +4,8 @@ class SETTINGS
 
 insert
    COMMAND_LINE
-      rename
-         fallback_editor as cli_fallback_editor
+      redefine
+         fallback_editor
       end
 
 create {ANY}
@@ -19,8 +19,8 @@ feature {ANY}
          i: INTEGER
          vars: ARRAY[STRING]
       once
-         if cli_fallback_editor /= Void then
-            Result := cli_fallback_editor
+         if Precursor /= Void then
+            Result := Precursor
          else
             vars := << "VISUAL", "EDITOR" >>
 
