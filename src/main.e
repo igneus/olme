@@ -63,8 +63,10 @@ feature {}
             output := fw
          end
 
-         output.put_string (last_line)
-         output.put_new_line
+         if last_line /= Void then
+            output.put_string (last_line)
+            output.put_new_line
+         end
 
          if settings.file_name /= Void then
             fw.disconnect
