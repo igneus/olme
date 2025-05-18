@@ -13,7 +13,10 @@ Liberty Eiffel
 
 ## Building
 
-`$ se c olme.ace`
+`$ se c olme.ace` - the safest build with all checks enabled
+
+`$ se c olme-fast.ace` - build with reduced runtime checks
+of Liberty Eiffel library classes for better performance
 
 ## Usage
 
