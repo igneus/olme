@@ -76,7 +76,6 @@ feature {}
    file_stats: FILE_STATS
       local
          file: REGULAR_FILE
-         fr: TEXT_FILE_READ
       once
          Result := create {FILE_STATS}.make
 
@@ -84,26 +83,7 @@ feature {}
             create file.make (settings.file_name)
 
             if file.exists and then file.is_regular then
-               create fr.connect_to (settings.file_name)
-
-               from
-                  fr.read_line
-               until
-                  fr.end_of_input
-               loop
-                  Result.lines_total := Result.lines_total + 1
-
-                  -- lines of zero length
-                  -- and lines beginning with the '#' shell comment
-                  -- character are considered empty
-                  if (not fr.last_string.is_empty) and then fr.last_string.item (1) /= '#' then
-                     Result.lines_nonempty := Result.lines_nonempty + 1
-                  end
-
-                  fr.read_line
-               end
-
-               fr.disconnect
+               Result.load (settings.file_name)
             end
          end
       end

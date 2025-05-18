@@ -1,7 +1,8 @@
 class FILE_STATS
 
 create {ANY}
-   make
+   make,
+   load
 
 feature {ANY}
    lines_total: INTEGER
@@ -9,21 +10,39 @@ feature {ANY}
    lines_nonempty: INTEGER
 
    make
+         -- Initialize an empty instance
       do
          lines_total := 0
          lines_nonempty := 0
       end
 
-   -- the `assign` keyword has in Liberty semantics completely opposite
-   -- to ISE Eiffel, cf. https://www.eiffel.org/doc/eiffel/ET-_The_Dynamic_Structure-_Execution_Model#Assigner_commands
-   set_lines_total (value: INTEGER) assign lines_total
+   load (path: STRING)
+         -- Load stats of the specified file
+      local
+         fr: TEXT_FILE_READ
       do
-         lines_total := value
-      end
+         make
 
-   set_lines_nonempty (value: INTEGER) assign lines_nonempty
-      do
-         lines_nonempty := value
+         create fr.connect_to (path)
+
+         from
+            fr.read_line
+         until
+            fr.end_of_input
+         loop
+            lines_total := lines_total + 1
+
+            -- lines of zero length
+            -- and lines beginning with the '#' shell comment
+            -- character are considered empty
+            if (not fr.last_string.is_empty) and then fr.last_string.item (1) /= '#' then
+               lines_nonempty := lines_nonempty + 1
+            end
+
+            fr.read_line
+         end
+
+         fr.disconnect
       end
 
 end
