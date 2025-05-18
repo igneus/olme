@@ -14,6 +14,8 @@ feature {ANY}
          if settings.is_valid then
             if settings.help_requested then
                settings.print_help (io)
+            elseif settings.auto_fallback_requested and file_stats.lines_nonempty > 1 then
+               run_fallback
             else
                run
             end
@@ -61,55 +63,56 @@ feature {}
          end
       end
 
-   print_file_contents_warning
-         -- Print a warning if the file is non-empty
+   file_stats: FILE_STATS
       local
          file: REGULAR_FILE
          fr: TEXT_FILE_READ
-         lines_total, lines_nonempty: INTEGER
-      do
+      once
+         Result := create {FILE_STATS}.make
+
          if settings.file_name /= Void then
             create file.make (settings.file_name)
 
             if file.exists and then file.is_regular then
                create fr.connect_to (settings.file_name)
 
-               lines_total := 0
-               lines_nonempty := 0
-
                from
                   fr.read_line
                until
                   fr.end_of_input
                loop
-                  lines_total := lines_total + 1
+                  Result.lines_total := Result.lines_total + 1
 
                   -- lines of zero length
                   -- and lines beginning with the '#' shell comment
                   -- character are considered empty
                   if (not fr.last_string.is_empty) and then fr.last_string.item (1) /= '#' then
-                     lines_nonempty := lines_nonempty + 1
+                     Result.lines_nonempty := Result.lines_nonempty + 1
                   end
 
                   fr.read_line
                end
 
                fr.disconnect
-
-               if lines_total > 0 then
-                  io.put_string ("WARNING: the file has ")
-                  io.put_integer (lines_total)
-                  io.put_string (" lines")
-
-                  if lines_nonempty > 0 then
-                     io.put_string (", ")
-                     io.put_integer (lines_nonempty)
-                     io.put_string (" of which are non-empty")
-                  end
-
-                  io.put_new_line
-               end
             end
+         end
+      end
+
+   print_file_contents_warning
+         -- Print a warning if the file is non-empty
+      do
+         if file_stats.lines_total > 0 then
+            io.put_string ("WARNING: the file has ")
+            io.put_integer (file_stats.lines_total)
+            io.put_string (" lines")
+
+            if file_stats.lines_nonempty > 0 then
+               io.put_string (", ")
+               io.put_integer (file_stats.lines_nonempty)
+               io.put_string (" of which are non-empty")
+            end
+
+            io.put_new_line
          end
       end
 
@@ -141,8 +144,7 @@ feature {}
          status: INTEGER
       do
          if handling_sigint = True then
-            status := run_fallback
-            die_with_code (status)
+            run_fallback -- does not return
          end
 
          prompt := "> "
@@ -155,11 +157,12 @@ feature {}
          end
       end
 
-   run_fallback: INTEGER
-         -- Run the fallback editor, return its exit code.
+   run_fallback
+         -- Run the fallback editor and exit
       local
          p: PROCESS
          args: TRAVERSABLE[STRING]
+         status: INTEGER
       do
          args := Void
          if settings.file_name /= Void then
@@ -170,7 +173,7 @@ feature {}
             std_error.put_string ("ERROR: fallback editor not set up. Please set the VISUAL or EDITOR environment variable.")
             std_error.put_new_line
 
-            Result := exit_failure_code
+            status := exit_failure_code
          else
             -- TODO is there a way to do the good old Unix exec(),
             --   replacing the current process with the new one?
@@ -182,8 +185,10 @@ feature {}
             p := pf.execute (settings.fallback_editor, args)
 
             p.wait
-            Result := p.status
+            status := p.status
          end
+
+         die_with_code (status)
       end
 
 end

@@ -16,7 +16,7 @@ feature {ANY}
          create factory
          create args.make (
             factory.no_parameters or
-            (opt_help and opt_silent and opt_fallback
+            (opt_help and opt_silent and opt_fallback and opt_auto_fallback
                and opt_git_history
                and arg_file)
                           )
@@ -51,6 +51,13 @@ feature {ANY}
          if opt_fallback.is_set then
             Result := opt_fallback.item.string
          end
+      end
+
+   auto_fallback_requested: BOOLEAN
+      require
+         is_valid
+      once
+         Result := opt_auto_fallback.is_set
       end
 
    git_history_requested: BOOLEAN
@@ -88,6 +95,11 @@ feature {}
    opt_fallback: COMMAND_LINE_TYPED_ARGUMENT[FIXED_STRING]
       once
          Result := factory.option_string ("f", "fallback", "EDITOR", "Editor to run as fallback for multi-line editing - the VISUAL and EDITOR environment variables are used by default")
+      end
+
+   opt_auto_fallback: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
+      once
+         Result := factory.option_boolean ("a", "auto-fallback", "Automatically run fallback editor if the file has multiple non-empty lines")
       end
 
    opt_git_history: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]

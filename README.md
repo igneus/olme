@@ -24,7 +24,7 @@ With git it's suggested to set up olme in `~/.gitconfig` like
 
 ```
 [core]
-  editor = olme --git-history
+  editor = olme --git-history --auto-fallback
 ```
 
 ## Fallback editor
