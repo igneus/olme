@@ -17,7 +17,7 @@ feature {ANY}
          create args.make (
             factory.no_parameters or
             (opt_help and opt_silent and opt_fallback and opt_auto_fallback
-               and opt_git_history and opt_hg_history
+               and opt_git_history and opt_hg_history and opt_custom_history
                and arg_file)
                           )
 
@@ -74,6 +74,15 @@ feature {ANY}
          Result := opt_hg_history.is_set
       end
 
+   custom_history_command: STRING
+      require
+         is_valid
+      once
+         if opt_custom_history.is_set then
+            Result := opt_custom_history.item.string
+         end
+      end
+
    file_name: STRING
       require
          is_valid
@@ -119,6 +128,12 @@ feature {}
       once
          -- TODO possibly remove short option
          Result := factory.option_boolean ("m", "hg-history", "Load Mercurial (hg) commit messages to readline history")
+      end
+
+   opt_custom_history: COMMAND_LINE_TYPED_ARGUMENT[FIXED_STRING]
+      once
+         -- TODO possibly remove short option
+         Result := factory.option_string ("H", "history", "COMMAND", "Load output of the specified command to readline history")
       end
 
 end

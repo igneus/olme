@@ -51,6 +51,9 @@ feature {}
             -- command valid as of Mercurial v6.9
             load_history ("hg", << "log", "--limit", settings.history_entries, "--template", "{desc|firstline}\n" >>)
          end
+         if settings.custom_history_command /= Void then
+            load_history (settings.shell, << "-c", settings.custom_history_command >>)
+         end
 
          read_user_input
 

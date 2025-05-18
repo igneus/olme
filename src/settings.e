@@ -18,7 +18,6 @@ feature {ANY}
          cmd: STRING
          i: INTEGER
          vars: ARRAY[STRING]
-         system: SYSTEM
       once
          if cli_fallback_editor /= Void then
             Result := cli_fallback_editor
@@ -45,11 +44,24 @@ feature {ANY}
          Result = Void or else Result.count > 0
       end
 
+   shell: STRING
+         -- The user's preferred shell.
+      once
+         Result := system.get_environment_variable ("SHELL")
+
+         if Result = Void or else Result.is_empty then
+            Result := "/bin/sh"
+         end
+      end
+
    history_entries: STRING
          -- How many recent commit messages to load from VCS history
          -- (string, because its only used when constructing shell commands)
       once
          Result := "30"
       end
+
+feature {}
+   system: SYSTEM
 
 end
