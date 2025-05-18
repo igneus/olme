@@ -44,7 +44,12 @@ feature {}
          end
 
          if settings.git_history_requested then
-            load_history
+            -- command valid as of git v2.47
+            load_history ("git", << "log", "--max-count", settings.history_entries, "--pretty=%%s" >>)
+         end
+         if settings.hg_history_requested then
+            -- command valid as of Mercurial v6.9
+            load_history ("hg", << "log", "--limit", settings.history_entries, "--template", "{desc|firstline}\n" >>)
          end
 
          read_user_input
@@ -116,12 +121,13 @@ feature {}
          end
       end
 
-   load_history
-         -- Load previous messages to readline history
+   load_history (command: STRING; args: TRAVERSABLE[STRING])
+         -- Execute the specified command,
+         -- add lines of its standard output to readline history.
       local
          p: PROCESS
       do
-         p := pf.execute ("git", << "log", "--max-count=30", "--pretty=%%s" >>)
+         p := pf.execute (command, args)
 
          from
             p.output.read_line

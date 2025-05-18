@@ -45,4 +45,11 @@ feature {ANY}
          Result = Void or else Result.count > 0
       end
 
+   history_entries: STRING
+         -- How many recent commit messages to load from VCS history
+         -- (string, because its only used when constructing shell commands)
+      once
+         Result := "30"
+      end
+
 end
