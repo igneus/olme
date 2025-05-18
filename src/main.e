@@ -37,7 +37,7 @@ feature {}
       do
 
          if not settings.is_silent then
-            io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run your default editor instead.%N")
+            io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run the fallback editor instead.%N")
             print_file_contents_warning
          end
 
@@ -62,7 +62,7 @@ feature {}
       end
 
    print_file_contents_warning
-         -- Prints a warning if the file is non-empty
+         -- Print a warning if the file is non-empty
       local
          file: REGULAR_FILE
          fr: TEXT_FILE_READ
@@ -134,8 +134,8 @@ feature {}
       end
 
    read_user_input
-         -- Reads one line of user input.
-         -- On SIGINT runs the fallback editor and exits.
+         -- Read one line of user input.
+         -- On SIGINT run the fallback editor and exit.
       local
          handling_sigint: BOOLEAN
          status: INTEGER
@@ -156,7 +156,7 @@ feature {}
       end
 
    run_fallback: INTEGER
-         -- Runs the fallback editor, returns its exit code.
+         -- Run the fallback editor, return its exit code.
       local
          p: PROCESS
          args: TRAVERSABLE[STRING]
