@@ -141,7 +141,6 @@ feature {}
          -- On SIGINT run the fallback editor and exit.
       local
          handling_sigint: BOOLEAN
-         status: INTEGER
       do
          if handling_sigint = True then
             run_fallback -- does not return
