@@ -8,7 +8,7 @@ insert
          fallback_editor as cli_fallback_editor
       end
 
-create
+create {ANY}
    make
 
 feature {ANY}
