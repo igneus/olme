@@ -15,7 +15,7 @@ feature {ANY}
             if settings.help_requested then
                settings.print_help (io)
             elseif settings.auto_fallback_requested and file_stats.lines_nonempty > 1 then
-               run_fallback
+               run_fallback_and_exit
             else
                run
             end
@@ -134,7 +134,7 @@ feature {}
          handling_sigint: BOOLEAN
       do
          if handling_sigint = True then
-            run_fallback -- does not return
+            run_fallback_and_exit
          end
 
          prompt := "> "
@@ -147,7 +147,7 @@ feature {}
          end
       end
 
-   run_fallback
+   run_fallback_and_exit
          -- Run the fallback editor and exit
       local
          p: PROCESS
