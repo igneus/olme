@@ -56,7 +56,7 @@ feature {ANY}
 
    history_entries: STRING
          -- How many recent commit messages to load from VCS history
-         -- (string, because its only used when constructing shell commands)
+         -- (string, because it's only used when constructing shell commands)
       once
          Result := "30"
       end
