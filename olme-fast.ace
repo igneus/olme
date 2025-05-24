@@ -23,4 +23,4 @@ cluster
   "${path_liberty_extra}/readline/loadpath.se"
 
 generate
-  clean(yes);
+  clean (yes);
