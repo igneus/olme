@@ -160,7 +160,7 @@ feature {}
          end
 
          if settings.fallback_editor = Void then
-            std_error.put_string ("ERROR: fallback editor not set up. Please set the VISUAL or EDITOR environment variable.")
+            std_error.put_string ("ERROR: fallback editor not set up. Please provide the --fallback option or set the VISUAL or EDITOR environment variable.")
             std_error.put_new_line
 
             status := exit_failure_code
