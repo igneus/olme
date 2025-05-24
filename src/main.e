@@ -2,6 +2,7 @@ class MAIN
 
 insert
    READ_LINE
+   C_FUNCTIONS
 
 create {ANY}
    make
@@ -56,6 +57,10 @@ feature {}
          end
 
          read_user_input
+
+         if is_fallback_requested (1) then
+            run_fallback_and_exit
+         end
 
          output := io
          if settings.file_name /= Void then
@@ -129,22 +134,10 @@ feature {}
 
    read_user_input
          -- Read one line of user input.
-         -- On SIGINT run the fallback editor and exit.
-      local
-         handling_sigint: BOOLEAN
       do
-         if handling_sigint = True then
-            run_fallback_and_exit
-         end
-
+         my_readline_init (1)
          prompt := "> "
          read_line
-      rescue
-         if is_signal and then signal_number = 2 then
-            -- TODO is it possible to somehow retrieve the text entered so far?
-            handling_sigint := True
-            retry
-         end
       end
 
    run_fallback_and_exit
