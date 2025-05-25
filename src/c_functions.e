@@ -1,7 +1,7 @@
 class C_FUNCTIONS
 
 feature {ANY}
-   my_readline_init (i: INTEGER)
+   my_readline_init (first_line: POINTER)
       external "plug_in"
       alias "{
          location: "."

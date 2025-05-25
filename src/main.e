@@ -79,17 +79,24 @@ feature {}
       end
 
    file_stats: FILE_STATS
-      local
-         file: REGULAR_FILE
       once
          Result := create {FILE_STATS}.make
 
-         if settings.file_name /= Void then
-            create file.make (settings.file_name)
+         if settings.file /= Void then
+            Result.load (settings.file.path)
+         end
+      end
 
-            if file.exists and then file.is_regular then
-               Result.load (settings.file_name)
-            end
+   first_line: FIXED_STRING
+         -- First line of the edited file - if available
+      local
+         fr: INPUT_STREAM
+      once
+         if settings.file /= Void then
+            fr := settings.file.read
+            fr.read_line
+            create Result.make_from_string (fr.last_string)
+            fr.disconnect
          end
       end
 
@@ -139,8 +146,14 @@ feature {}
 
    read_user_input
          -- Read one line of user input.
+      local
+         first_line_ptr: POINTER
       do
-         my_readline_init (1)
+         if first_line /= Void then
+            first_line_ptr := first_line.to_external
+         end
+
+         my_readline_init (first_line_ptr)
          prompt := "> "
          read_line
       end

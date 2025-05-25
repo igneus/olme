@@ -61,6 +61,20 @@ feature {ANY}
          Result := "30"
       end
 
+   file: REGULAR_FILE
+         -- Input file
+      once
+         if file_name /= Void then
+            create Result.make (file_name)
+
+            if not (Result.exists and then Result.is_regular) then
+               Result := Void
+            end
+         end
+      ensure
+         Result = Void or else (Result.exists and then Result.is_regular)
+      end
+
 feature {}
    system: SYSTEM
 

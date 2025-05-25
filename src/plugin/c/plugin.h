@@ -1,3 +1,3 @@
-void my_readline_init(int i);
+void my_readline_init(char *first_line);
 
 int is_fallback_requested(int i);

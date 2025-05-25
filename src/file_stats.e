@@ -16,7 +16,7 @@ feature {ANY}
          lines_nonempty := 0
       end
 
-   load (path: STRING)
+   load (path: ABSTRACT_STRING)
          -- Load stats of the specified file
       local
          fr: TEXT_FILE_READ
