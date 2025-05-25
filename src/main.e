@@ -40,7 +40,7 @@ feature {}
       do
 
          if not settings.is_silent then
-            io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+C] to run the fallback editor instead.%N")
+            io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+B] to run the fallback editor instead.%N")
             print_file_contents_warning
          end
 
