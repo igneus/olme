@@ -121,7 +121,7 @@ feature {}
    opt_git_history: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
       once
          -- TODO possibly remove short option
-         Result := factory.option_boolean ("t", "git-history", "Load git commit messages to readline history")
+         Result := factory.option_boolean ("g", "git-history", "Load git commit messages to readline history")
       end
 
    opt_hg_history: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
