@@ -38,6 +38,24 @@ is looked for in this order:
 If none is provided and SIGINT is received,
 the program exits with an error message and exit code 1.
 
+## Key bindings
+
+olme uses GNU Readline for the input prompt,
+so the [standard Readline keybindings][https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Interaction],
+familiar from the shell and elsewhere, are available.
+Custom key bindings
+[can be configured in `~/.inputrc`](https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Init-File).
+
+olme defines a single custom command, named `fallback-editor`,
+which closes the simple input prompt and runs the fallback editor.
+A custom key binding can be configured like this:
+
+```inputrc
+$if olme
+Control-x: fallback-editor
+$endif
+```
+
 ## Why
 
 For most commit messages running an editor like `vim` -
