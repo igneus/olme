@@ -40,8 +40,8 @@ void my_readline_init(char *first_line)
   rl_readline_name = "olme";
 
   // define a named function and set up default key binding
-  rl_add_defun("fallback-editor", &rl_fun__fallback_editor, -1);
-  rl_bind_keyseq("\\C-b", &rl_fun__fallback_editor);
+  rl_add_defun("fallback-editor", rl_fun__fallback_editor, -1);
+  rl_bind_keyseq("\\C-b", rl_fun__fallback_editor);
 
   if (first_line != NULL) {
     initial_content = first_line;
