@@ -1,4 +1,5 @@
-class FILE_STATS
+class FILE_GIST
+-- Everything olme needs to know about the file's contents
 
 create {ANY}
    make,
@@ -9,11 +10,14 @@ feature {ANY}
 
    lines_nonempty: INTEGER
 
+   first_line: STRING
+
    make
          -- Initialize an empty instance
       do
          lines_total := 0
          lines_nonempty := 0
+         first_line := Void
       end
 
    load (path: ABSTRACT_STRING)
@@ -27,6 +31,9 @@ feature {ANY}
 
          from
             fr.read_line
+            if fr.last_string /= Void then
+               create first_line.copy (fr.last_string)
+            end
          until
             fr.end_of_input
          loop

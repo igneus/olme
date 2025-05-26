@@ -15,7 +15,7 @@ feature {ANY}
          if settings.is_valid then
             if settings.help_requested then
                settings.print_help (io)
-            elseif settings.auto_fallback_requested and file_stats.lines_nonempty > 1 then
+            elseif settings.auto_fallback_requested and file_gist.lines_nonempty > 1 then
                run_fallback_and_exit
             else
                run
@@ -78,9 +78,9 @@ feature {}
          end
       end
 
-   file_stats: FILE_STATS
+   file_gist: FILE_GIST
       once
-         Result := create {FILE_STATS}.make
+         Result := create {FILE_GIST}.make
 
          if settings.file /= Void then
             Result.load (settings.file.path)
@@ -89,14 +89,9 @@ feature {}
 
    first_line: FIXED_STRING
          -- First line of the edited file - if available
-      local
-         fr: INPUT_STREAM
       once
-         if settings.file /= Void then
-            fr := settings.file.read
-            fr.read_line
-            create Result.make_from_string (fr.last_string)
-            fr.disconnect
+         if file_gist.first_line /= Void then
+            create Result.make_from_string (file_gist.first_line)
          end
       end
 
@@ -108,14 +103,14 @@ feature {}
    print_file_contents_warning
          -- Print a warning if the file is non-empty
       do
-         if file_stats.lines_total > 0 then
+         if file_gist.lines_total > 0 then
             io.put_string ("WARNING: the file has ")
-            io.put_integer (file_stats.lines_total)
+            io.put_integer (file_gist.lines_total)
             io.put_string (" lines")
 
-            if file_stats.lines_nonempty > 0 then
+            if file_gist.lines_nonempty > 0 then
                io.put_string (", ")
-               io.put_integer (file_stats.lines_nonempty)
+               io.put_integer (file_gist.lines_nonempty)
                io.put_string (" of which are non-empty")
             end
 
