@@ -1,7 +1,7 @@
 int fallback_editor_requested = 0;
 char *initial_content = NULL;
 
-/*
+/**
  * Used as a Readline named command.
  *
  * Function signature specification:
@@ -17,7 +17,7 @@ int rl_fun__fallback_editor(int count, int key)
 }
 
 /**
- * Readline init hook.
+ * Readline startup hook.
  * Sets initial content of the input field.
  */
 int rl_hook__set_initial_content()
@@ -30,7 +30,7 @@ int rl_hook__set_initial_content()
   return 0;
 }
 
-/*
+/**
  * Custom Readline initialization.
  */
 void my_readline_init(char *first_line)
@@ -49,7 +49,7 @@ void my_readline_init(char *first_line)
   }
 }
 
-/*
+/**
  * Predicate: did the user request the fallback editor?
  *
  * (argument not used, but Liberty doesn't call external functions
