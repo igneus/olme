@@ -4,8 +4,7 @@ Single-purpose text editor designed to quickly enter short commit messages.
 
 Write one line commit message.
 `Enter` to save and close or
-`Ctrl+B` to fall back to a fallback editor (which should be a full-featured
-text editor for the cases when a multi-line message is needed).
+`Ctrl+B` to fall back to a full-featured text editor.
 
 ## Prerequisites
 
