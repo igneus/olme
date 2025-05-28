@@ -46,7 +46,7 @@ feature {}
 
          if settings.git_history_requested then
             -- command valid as of git v2.47
-            load_history ("git", << "log", "--max-count", settings.history_entries, "--pretty=%%s" >>)
+            load_history ("git", << "log", "--reverse", "--max-count", settings.history_entries, "--pretty=%%s" >>)
          end
          if settings.hg_history_requested then
             -- command valid as of Mercurial v6.9
