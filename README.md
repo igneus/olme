@@ -34,7 +34,7 @@ is looked for in this order:
 - value of the `VISUAL` environment variable
 - value of the `EDITOR` environment variable
 
-If none is provided and SIGINT is received,
+If none is provided and the fallback action is triggered,
 the program exits with an error message and exit code 1.
 
 ## Key bindings
