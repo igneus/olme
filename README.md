@@ -41,7 +41,7 @@ the program exits with an error message and exit code 1.
 ## Key bindings
 
 olme uses GNU Readline for the input prompt,
-so the [standard Readline keybindings][https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Interaction],
+so the [standard Readline keybindings](https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Interaction),
 familiar from the shell and elsewhere, are available.
 Custom key bindings
 [can be configured in `~/.inputrc`](https://tiswww.cwru.edu/php/chet/readline/readline.html#Readline-Init-File).
