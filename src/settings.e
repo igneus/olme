@@ -5,7 +5,8 @@ class SETTINGS
 insert
    COMMAND_LINE
       redefine
-         fallback_editor
+         fallback_editor,
+         history_limit
       end
 
 create {ANY}
@@ -58,7 +59,21 @@ feature {ANY}
          -- How many recent commit messages to load from VCS history
          -- (string, because it's only used when constructing shell commands)
       once
-         Result := "30"
+         Result := history_limit.to_string
+      end
+
+   default_history_limit: INTEGER is 30
+
+   history_limit: INTEGER
+         -- How many recent commit messages to load from VCS history
+      once
+         if Precursor <= 0 then
+            Result := default_history_limit
+         else
+            Result := Precursor
+         end
+      ensure
+         Result > 0
       end
 
    file: REGULAR_FILE

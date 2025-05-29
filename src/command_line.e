@@ -17,6 +17,7 @@ feature {ANY}
          create args.make (
             factory.no_parameters or
             (opt_help and opt_silent and opt_fallback and opt_auto_fallback
+               and opt_history_limit
                and opt_git_history and opt_hg_history and opt_custom_history
                and arg_file)
                           )
@@ -58,6 +59,13 @@ feature {ANY}
          is_valid
       once
          Result := opt_auto_fallback.is_set
+      end
+
+   history_limit: INTEGER
+      require
+         is_valid
+      once
+         Result := opt_history_limit.item
       end
 
    git_history_requested: BOOLEAN
@@ -116,6 +124,11 @@ feature {}
    opt_auto_fallback: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
       once
          Result := factory.option_boolean ("a", "auto-fallback", "Automatically run fallback editor if the file has multiple non-empty lines")
+      end
+
+   opt_history_limit: COMMAND_LINE_TYPED_ARGUMENT[INTEGER]
+      once
+         Result := factory.option_integer ("l", "history-limit", "LIMIT", "Load at most LIMIT history entries (applies only for the built-in history providers, has no effect when --history is used)")
       end
 
    opt_git_history: COMMAND_LINE_TYPED_ARGUMENT[BOOLEAN]
