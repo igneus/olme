@@ -41,17 +41,7 @@ feature {}
             print_file_contents_warning
          end
 
-         if settings.git_history_requested then
-            -- command valid as of git v2.47
-            load_history ("git", << "log", "--reverse", "--max-count", settings.history_entries, "--pretty=%%s" >>)
-         end
-         if settings.hg_history_requested then
-            -- command valid as of Mercurial v6.9
-            load_history ("hg", << "log", "--limit", settings.history_entries, "--template", "{desc|firstline}\n" >>)
-         end
-         if settings.custom_history_command /= Void then
-            load_history (settings.shell, << "-c", settings.custom_history_command >>)
-         end
+         load_history
 
          read_user_input
 
@@ -102,7 +92,23 @@ feature {}
          end
       end
 
-   load_history (command: STRING; args: TRAVERSABLE[STRING])
+   load_history
+         -- Populate Readline history - if any source is specified
+      do
+         if settings.git_history_requested then
+            -- command valid as of git v2.47
+            load_history_cmd ("git", << "log", "--reverse", "--max-count", settings.history_entries, "--pretty=%%s" >>)
+         end
+         if settings.hg_history_requested then
+            -- command valid as of Mercurial v6.9
+            load_history_cmd ("hg", << "log", "--limit", settings.history_entries, "--template", "{desc|firstline}\n" >>)
+         end
+         if settings.custom_history_command /= Void then
+            load_history_cmd (settings.shell, << "-c", settings.custom_history_command >>)
+         end
+      end
+
+   load_history_cmd (command: STRING; args: TRAVERSABLE[STRING])
          -- Execute the specified command,
          -- add lines of its standard output to readline history.
       local
