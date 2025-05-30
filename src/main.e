@@ -34,9 +34,6 @@ feature {}
          -- Run the logic of file editing
       require
          settings.is_valid
-      local
-         output: OUTPUT_STREAM
-         fw: TEXT_FILE_WRITE
       do
 
          if not settings.is_silent then
@@ -62,20 +59,7 @@ feature {}
             run_fallback_and_exit
          end
 
-         output := io
-         if settings.file_name /= Void then
-            create fw.connect_to (settings.file_name) -- truncate and write
-            output := fw
-         end
-
-         if last_line /= Void then
-            output.put_string (last_line)
-            output.put_new_line
-         end
-
-         if settings.file_name /= Void then
-            fw.disconnect
-         end
+         write_file
       end
 
    file_gist: FILE_GIST
@@ -185,6 +169,28 @@ feature {}
          end
 
          die_with_code (status)
+      end
+
+   write_file
+         -- Write editor contents to the specified file
+      local
+         output: OUTPUT_STREAM
+         fw: TEXT_FILE_WRITE
+      do
+         output := io -- use stdout as default destination
+         if settings.file_name /= Void then
+            create fw.connect_to (settings.file_name) -- truncate and write
+            output := fw
+         end
+
+         if last_line /= Void then
+            output.put_string (last_line)
+            output.put_new_line
+         end
+
+         if settings.file_name /= Void then
+            fw.disconnect
+         end
       end
 
 end
