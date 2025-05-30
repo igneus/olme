@@ -6,6 +6,8 @@ Write one line commit message.
 `Enter` to save and close or
 `Ctrl+B` to fall back to a full-featured text editor.
 
+(Yes, it's basically just GNU Readline saving to a file. With a few extras.)
+
 ## Prerequisites
 
 [Liberty Eiffel](https://www.liberty-eiffel.org/)
