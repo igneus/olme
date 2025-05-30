@@ -1,6 +1,5 @@
--- production build: all assertions for project classes,
--- for Liberty Eiffel libraries assume correct implementation
--- and only check requirements on method calls
+-- debug build with all assertions active,
+-- including all runtime assertions of the core classes and standard library
 system
   "olme"
 
@@ -8,15 +7,11 @@ root
   MAIN: make
 
 default
-  assertion (require)
+  assertion (all)
   collect (no)
 
 cluster
   "./src"
-    default
-      assertion (all)
-    end
-
   "${path_liberty_core}/loadpath.se"
   "${path_liberty_extra}/common/loadpath.se"
   "${path_liberty_extra}/posix/loadpath.se"
