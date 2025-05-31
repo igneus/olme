@@ -45,7 +45,7 @@ feature {}
 
          read_user_input
 
-         if is_fallback_requested (1) then
+         if is_fallback_requested then
             run_fallback_and_exit
          end
 

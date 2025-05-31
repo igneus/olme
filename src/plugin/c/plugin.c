@@ -53,7 +53,8 @@ void my_readline_init(char *first_line)
  * Predicate: did the user request the fallback editor?
  *
  * (argument not used, but Liberty doesn't call external functions
- * which don't receive arguments)
+ * which don't receive arguments:
+ * https://savannah.gnu.org/bugs/index.php?67160 )
  */
 int is_fallback_requested(int i)
 {
