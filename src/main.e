@@ -1,8 +1,7 @@
 class MAIN
 
 insert
-   READ_LINE
-   C_FUNCTIONS
+   MY_READ_LINE
 
 create {ANY}
    make
@@ -131,14 +130,8 @@ feature {}
 
    read_user_input
          -- Read one line of user input.
-      local
-         first_line_ptr: POINTER
       do
-         if first_line /= Void then
-            first_line_ptr := first_line.to_external
-         end
-
-         my_readline_init (first_line_ptr)
+         initial_content := first_line
          prompt := "> "
          read_line
       end
