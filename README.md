@@ -25,6 +25,18 @@ With git it's suggested to set up olme in `~/.gitconfig` like
   editor = olme --git-history --auto-fallback
 ```
 
+`--git-history` loads recent git commit messages
+to readline history (browsed by up/down arrow keys).
+In addition to git, olme provides similar support for Mercurial
+(`--hg-history`)
+and for a shell command providing the history entries
+(e.g. `--history "tail ~/.bash_history"`).
+
+`--auto-fallback` skips the olme prompt and immediately runs
+the fallback editor if the edited file has more than one
+non-empty line.
+(Lines beginning with the shell comment sign `#` are considered empty.)
+
 ## Fallback editor
 
 is looked for in this order:
