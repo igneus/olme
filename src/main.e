@@ -34,21 +34,18 @@ feature {}
       require
          settings.is_valid
       do
-
          if not settings.is_silent then
             print_tagline
             print_file_contents_warning
          end
 
          load_history
-
          read_user_input
+         write_file
 
          if is_fallback_requested then
             run_fallback_and_exit
          end
-
-         write_file
       end
 
    file_gist: FILE_GIST
