@@ -174,10 +174,16 @@ feature {}
          -- Write editor contents to the specified file
       local
          output: OUTPUT_STREAM
+         fr: TEXT_FILE_READ
          fw: TEXT_FILE_WRITE
       do
          output := io -- use stdout as default destination
          if settings.file_name /= Void then
+            if settings.file /= Void then
+               create fr.connect_to (settings.file_name)
+               fr.read_line -- drop the first line
+            end
+
             create fw.connect_to (settings.file_name) -- truncate and write
             output := fw
          end
@@ -185,6 +191,21 @@ feature {}
          if last_line /= Void then
             output.put_string (last_line)
             output.put_new_line
+         end
+
+         if fr /= Void then
+            from
+               fr.read_line
+            until
+               fr.end_of_input
+            loop
+               output.put_string (fr.last_string)
+               output.put_new_line
+
+               fr.read_line
+            end
+
+            fr.disconnect
          end
 
          if settings.file_name /= Void then
