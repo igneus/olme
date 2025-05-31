@@ -8,6 +8,7 @@ create {ANY}
 
 feature {ANY}
    make
+         -- Main entry point of the application
       do
          create settings.make
 
@@ -49,6 +50,7 @@ feature {}
       end
 
    file_gist: FILE_GIST
+         -- Summary of the edited file's contents
       once
          Result := create {FILE_GIST}.make
 
