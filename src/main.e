@@ -2,6 +2,7 @@ class MAIN
 
 insert
    MY_READ_LINE
+   PLURALIZER
 
 create {ANY}
    make
@@ -78,12 +79,15 @@ feature {}
          if file_gist.lines_total > 0 then
             io.put_string ("WARNING: the file has ")
             io.put_integer (file_gist.lines_total)
-            io.put_string (" lines")
+            io.put_string (" ")
+            io.put_string (pluralize_simple ("line", file_gist.lines_total))
 
             if file_gist.lines_nonempty > 0 then
                io.put_string (", ")
                io.put_integer (file_gist.lines_nonempty)
-               io.put_string (" of which are non-empty")
+               io.put_string (" of which ")
+               io.put_string (pluralize_fork ("is", "are", file_gist.lines_nonempty))
+               io.put_string (" non-empty")
             end
 
             io.put_new_line
