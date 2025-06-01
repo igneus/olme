@@ -211,7 +211,7 @@ feature {}
             fr.disconnect
          end
 
-         if settings.file_name /= Void then
+         if fw /= Void then
             fw.disconnect
          end
       end
