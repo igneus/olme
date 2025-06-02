@@ -30,8 +30,6 @@ feature {ANY}
 
    is_fallback_requested: BOOLEAN
       do
-         -- (The argument has no meaning, it's required because
-         -- of a bug in Liberty Eiffel, see the corresponding C code)
          Result := is_fallback_requested_internal (1)
       end
 
@@ -46,6 +44,8 @@ feature {}
       end
 
    is_fallback_requested_internal (i: INTEGER): BOOLEAN
+         -- (The argument has no meaning, it's required because
+         -- of a bug in Liberty Eiffel, see the corresponding C code)
       external "plug_in"
       alias "{
          location: "."
