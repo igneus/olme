@@ -53,7 +53,7 @@ feature {}
    file_gist: FILE_GIST
          -- Summary of the edited file's contents
       once
-         Result := create {FILE_GIST}.make
+         create Result.make
 
          if settings.file /= Void then
             Result.load (settings.file.path)
