@@ -80,14 +80,6 @@ feature {}
          end
       end
 
-   first_line: FIXED_STRING
-         -- First line of the edited file - if available
-      once
-         if file_gist.first_line /= Void then
-            create Result.make_from_string (file_gist.first_line)
-         end
-      end
-
    load_history
          -- Populate Readline history - if any source is specified
       do
@@ -128,7 +120,10 @@ feature {}
    read_user_input
          -- Read one line of user input.
       do
-         initial_content := first_line
+         if file_gist.first_line /= Void then
+            initial_content := create {FIXED_STRING}.make_from_string (file_gist.first_line)
+         end
+
          prompt := "> "
          read_line
       end
