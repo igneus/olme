@@ -2,7 +2,6 @@ class MAIN
 
 insert
    MY_READ_LINE
-   PLURALIZER
 
 create {ANY}
    make
@@ -13,11 +12,10 @@ feature {ANY}
       local
          signal_received: BOOLEAN
       do
-         if signal_received then
-            std_error.put_string ("Received signal ")
-            std_error.put_integer (signal_number)
-            std_error.put_new_line
+         create msg
 
+         if signal_received then
+            msg.print_signal_received (signal_number)
             die_with_code (exit_failure_code)
          end
 
@@ -32,6 +30,7 @@ feature {ANY}
 feature {}
    settings: SETTINGS
    pf: PROCESS_FACTORY
+   msg: MESSAGES
 
    process_settings
          -- Collect settings and do as they command
@@ -58,8 +57,8 @@ feature {}
          settings.is_valid
       do
          if not settings.is_silent then
-            print_tagline
-            print_file_contents_warning
+            msg.print_tagline
+            msg.print_file_contents_warning (file_gist)
          end
 
          load_history
@@ -86,32 +85,6 @@ feature {}
       once
          if file_gist.first_line /= Void then
             create Result.make_from_string (file_gist.first_line)
-         end
-      end
-
-   print_tagline
-      do
-         io.put_string ("olme editor: [Enter] to save and exit, [Ctrl+B] to run the fallback editor instead.%N")
-      end
-
-   print_file_contents_warning
-         -- Print a warning if the file is non-empty
-      do
-         if file_gist.lines_total > 0 then
-            io.put_string ("WARNING: the file has ")
-            io.put_integer (file_gist.lines_total)
-            io.put_string (" ")
-            io.put_string (pluralize_simple ("line", file_gist.lines_total))
-
-            if file_gist.lines_nonempty > 0 then
-               io.put_string (", ")
-               io.put_integer (file_gist.lines_nonempty)
-               io.put_string (" of which ")
-               io.put_string (pluralize_fork ("is", "are", file_gist.lines_nonempty))
-               io.put_string (" non-empty")
-            end
-
-            io.put_new_line
          end
       end
 
@@ -173,9 +146,7 @@ feature {}
          end
 
          if settings.fallback_editor = Void then
-            std_error.put_string ("ERROR: fallback editor not set up. Please provide the --fallback option or set the VISUAL or EDITOR environment variable.")
-            std_error.put_new_line
-
+            msg.print_fallback_editor_not_set
             status := exit_failure_code
          else
             -- TODO is there a way to do the good old Unix exec(),
