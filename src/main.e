@@ -10,6 +10,31 @@ create {ANY}
 feature {ANY}
    make
          -- Main entry point of the application
+      local
+         signal_received: BOOLEAN
+      do
+         if signal_received then
+            std_error.put_string ("Received signal ")
+            std_error.put_integer (signal_number)
+            std_error.put_new_line
+
+            die_with_code (exit_failure_code)
+         end
+
+         process_settings
+      rescue
+         if is_signal then
+            signal_received := True
+            retry
+         end
+      end
+
+feature {}
+   settings: SETTINGS
+   pf: PROCESS_FACTORY
+
+   process_settings
+         -- Collect settings and do as they command
       do
          create settings.make
 
@@ -26,10 +51,6 @@ feature {ANY}
             die_with_code (exit_failure_code)
          end
       end
-
-feature {}
-   settings: SETTINGS
-   pf: PROCESS_FACTORY
 
    run
          -- Run the logic of file editing
