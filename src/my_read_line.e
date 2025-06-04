@@ -29,8 +29,17 @@ feature {ANY}
       end
 
    is_fallback_requested: BOOLEAN
-      do
-         Result := is_fallback_requested_internal (1)
+      external "plug_in"
+      alias "{
+         location: "."
+         module_name: "plugin"
+         feature_name: "is_fallback_requested()"
+         }"
+         -- The parentheses in feature_name are a workaround:
+         -- for calls of functions which don't receive arguments
+         -- Liberty generates invalid C code, adding the parentheses
+         -- here is a dirty fix
+         -- https://savannah.gnu.org/bugs/index.php?67160
       end
 
 feature {}
@@ -40,17 +49,6 @@ feature {}
          location: "."
          module_name: "plugin"
          feature_name: "my_readline_init"
-         }"
-      end
-
-   is_fallback_requested_internal (i: INTEGER): BOOLEAN
-         -- (The argument has no meaning, it's required because
-         -- of a bug in Liberty Eiffel, see the corresponding C code)
-      external "plug_in"
-      alias "{
-         location: "."
-         module_name: "plugin"
-         feature_name: "is_fallback_requested"
          }"
       end
 
