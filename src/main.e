@@ -115,6 +115,10 @@ feature {}
          end
 
          p.wait
+
+         if p.status /= exit_success_code then
+            msg.external_command_error ("loading history", command, p.status)
+         end
       end
 
    read_user_input
@@ -149,12 +153,19 @@ feature {}
             pf.set_keep_environment (True)
             pf.set_direct_input (True)
             pf.set_direct_output (True)
-            pf.set_direct_error (True)
+
+            -- TODO: we want `set_direct_error (True)`, too, but
+            --   currently it's broken: https://savannah.gnu.org/bugs/?67196
+            -- pf.set_direct_error (True)
 
             p := pf.execute (settings.fallback_editor, args)
 
             p.wait
             status := p.status
+
+            if p.status /= exit_success_code then
+               msg.external_command_error ("fallback editor", settings.fallback_editor, p.status)
+            end
          end
 
          die_with_code (status)

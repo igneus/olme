@@ -43,4 +43,12 @@ feature {ANY}
          std_error.put_string ("ERROR: fallback editor not set up. Please provide the --fallback option or set the VISUAL or EDITOR environment variable.%N")
       end
 
+   external_command_error (label, command: STRING; exit_code: INTEGER)
+      do
+         std_error.put_string ("ERROR " + label + ": ")
+         std_error.put_string ("'" + command + "' returned status ")
+         std_error.put_integer (exit_code)
+         std_error.put_new_line
+      end
+
 end
