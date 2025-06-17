@@ -141,7 +141,7 @@ feature {}
       do
          args := Void
          if settings.file_name /= Void then
-            args := {FAST_ARRAY[STRING] << settings.file_name >> }
+            args := << settings.file_name >>
          end
 
          if settings.fallback_editor = Void then
