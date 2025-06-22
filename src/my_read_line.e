@@ -14,14 +14,14 @@ inherit
 feature {ANY}
    -- If set, the readline entry field will be pre-populated with the
    -- given string.
-   initial_content: FIXED_STRING
+   initial_content: ABSTRACT_STRING
 
    read_line
       local
          first_line_ptr: POINTER
       do
          if initial_content /= Void then
-            first_line_ptr := initial_content.to_external
+            first_line_ptr := initial_content.intern.to_external
          end
          my_readline_init (first_line_ptr)
 

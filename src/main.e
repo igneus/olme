@@ -125,7 +125,7 @@ feature {}
          -- Read one line of user input.
       do
          if file_gist.first_line /= Void then
-            initial_content := create {FIXED_STRING}.make_from_string (file_gist.first_line)
+            initial_content := file_gist.first_line
          end
 
          prompt := "> "
