@@ -26,17 +26,18 @@ feature {ANY}
             io.put_string (" ")
             io.put_string (pluralize_simple ("line", file_gist.lines_total))
 
+            io.put_string (" (")
             if file_gist.lines_nonempty > 0 then
-               io.put_string (", ")
                if file_gist.lines_nonempty = file_gist.lines_total then
-                  io.put_string ("all of them non-empty")
+                  io.put_string ("all")
                else
                   io.put_integer (file_gist.lines_nonempty)
-                  io.put_string (" of which ")
-                  io.put_string (pluralize_fork ("is", "are", file_gist.lines_nonempty))
-                  io.put_string (" non-empty")
                end
+               io.put_string (" non-empty")
+            else
+               io.put_string ("all empty")
             end
+            io.put_string (")")
 
             io.put_new_line
          end
